@@ -110,6 +110,67 @@ io.on('connection', (socket) => {
     io.to(roomId).emit('output-cleared');
   });
 
+  // WebRTC signaling for video/audio chat
+  socket.on('webrtc-offer', ({ roomId, to, offer }) => {
+    io.to(to).emit('webrtc-offer', { from: socket.id, offer });
+  });
+
+  socket.on('webrtc-answer', ({ roomId, to, answer }) => {
+    io.to(to).emit('webrtc-answer', { from: socket.id, answer });
+  });
+
+  socket.on('webrtc-ice-candidate', ({ roomId, to, candidate }) => {
+    io.to(to).emit('webrtc-ice-candidate', { from: socket.id, candidate });
+  });
+
+  socket.on('request-peers', ({ roomId }) => {
+    const room = rooms.get(roomId);
+    if (room) {
+      const peers = room.users.filter(id => id !== socket.id);
+      socket.emit('peers-list', { peers });
+    }
+  });
+
+  // Timer events
+  socket.on('timer-start', ({ roomId, duration }) => {
+    const room = rooms.get(roomId);
+    if (room) {
+      room.timerDuration = duration;
+      room.timerRemainingTime = duration;
+      io.to(roomId).emit('timer-started', { duration, remainingTime: duration });
+    }
+  });
+
+  socket.on('timer-pause', ({ roomId, remainingTime }) => {
+    const room = rooms.get(roomId);
+    if (room) {
+      room.timerRemainingTime = remainingTime;
+      io.to(roomId).emit('timer-paused', { remainingTime });
+    }
+  });
+
+  socket.on('timer-resume', ({ roomId, remainingTime }) => {
+    io.to(roomId).emit('timer-resumed', { remainingTime });
+  });
+
+  socket.on('timer-reset', ({ roomId, duration }) => {
+    const room = rooms.get(roomId);
+    if (room) {
+      room.timerDuration = duration;
+      room.timerRemainingTime = duration;
+      io.to(roomId).emit('timer-reset', { duration });
+    }
+  });
+
+  // Whiteboard events
+  socket.on('whiteboard-draw', ({ roomId, tool, color, lineWidth, startX, startY, endX, endY }) => {
+    socket.to(roomId).emit('whiteboard-draw', { tool, color, lineWidth, startX, startY, endX, endY });
+  });
+
+  socket.on('whiteboard-clear', ({ roomId }) => {
+    socket.to(roomId).emit('whiteboard-clear');
+  });
+
   // Handle disconnection
   socket.on('disconnect', () => {
     console.log('Client disconnected:', socket.id);
@@ -122,6 +183,8 @@ io.on('connection', (socket) => {
         io.to(roomId).emit('user-left', {
           userCount: room.users.length
         });
+        // Notify peers about disconnection for WebRTC
+        io.to(roomId).emit('peer-disconnected', { userId: socket.id });
       }
     });
   });

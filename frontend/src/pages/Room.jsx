@@ -4,6 +4,10 @@ import { io } from 'socket.io-client';
 import axios from 'axios';
 import CodeEditor from '../components/CodeEditor';
 import OutputPanel from '../components/OutputPanel';
+import VideoChat from '../components/VideoChat';
+import CodeTemplates from '../components/CodeTemplates';
+import InterviewTimer from '../components/InterviewTimer';
+import Whiteboard from '../components/Whiteboard';
 import './Room.css';
 
 const API_URL = 'http://localhost:3001';
@@ -115,6 +119,10 @@ function Room() {
     alert('Room link copied to clipboard!');
   };
 
+  const insertTemplate = (templateCode) => {
+    handleCodeChange(templateCode);
+  };
+
   return (
     <div className="room">
       <div className="room-header">
@@ -147,6 +155,25 @@ function Room() {
             <option value="typescript">TypeScript</option>
           </select>
         </div>
+        <CodeTemplates language={language} onInsert={insertTemplate} />
+      </div>
+
+      <div className="room-sidebar">
+        <VideoChat 
+          socket={socketRef.current}
+          roomId={roomId}
+          isConnected={isConnected}
+        />
+        <InterviewTimer
+          socket={socketRef.current}
+          roomId={roomId}
+          isConnected={isConnected}
+        />
+        <Whiteboard
+          socket={socketRef.current}
+          roomId={roomId}
+          isConnected={isConnected}
+        />
       </div>
 
       <div className="room-content">

@@ -11,6 +11,10 @@ A real-time collaborative coding interview platform built with React, Vite, Expr
   - **JavaScript**: Direct execution using `new Function()`
   - **Python**: Compiled to WASM using **Pyodide**
 - 🌐 **WebSocket Communication** - Instant synchronization across all connected users
+- 📹 **Video/Audio Chat** - WebRTC-based video conferencing for face-to-face interviews
+- 📋 **Code Templates** - Quick insert common patterns, algorithms, and data structures
+- ⏱️ **Interview Timer** - Synchronized countdown timer with pause/resume controls
+- 🎨 **Collaborative Whiteboard** - Draw diagrams and explain concepts in real-time
 - 📱 **Responsive Design** - Works on desktop and mobile devices
 - ✅ **Comprehensive Tests** - Integration tests for client-server interaction
 
@@ -444,14 +448,14 @@ See **[DEPLOYMENT.md](DEPLOYMENT.md)** for complete deployment guide.
 - [ ] Backend code execution service (Judge0, Piston API)
 - [ ] User authentication
 - [ ] Persistent room storage (database)
-- [ ] Video/audio chat integration
-- [ ] Code templates and snippets
-- [ ] Interview timer
-- [ ] Collaborative whiteboard
 - [ ] Code diff/history viewer
 - [ ] Export interview sessions
 - [ ] End-to-end tests with Playwright/Cypress
 - [x] Docker containerization
+- [x] Video/audio chat integration
+- [x] Code templates and snippets
+- [x] Interview timer
+- [x] Collaborative whiteboard
 - [ ] CI/CD pipeline
 
 ## Security Notes
