@@ -1,0 +1,19 @@
+node_modules/
+.env
+.DS_Store
+*.log
+
+# Dependency directories
+backend/node_modules/
+frontend/node_modules/
+
+# Build outputs
+frontend/dist/
+frontend/dist-ssr/
+frontend/coverage/
+
+# Local files
+*.local
+.vscode/*
+!.vscode/extensions.json
+.idea
